@@ -3,6 +3,12 @@
 echo "[TASK 1] Pull required containers"
 kubeadm config images pull >/dev/null 2>&1
 
+#Install kubectl on kubernetes master
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+cp /etc/kubernetes/admin.conf /home/vagrant/config
+mkdir -p .kube
+mv config .kube/
+chown $(id -u):$(id -g ) $HOME/.kube/config
 echo "[TASK 2] Initialize Kubernetes Cluster"
 kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.168.0.0/16 >> /root/kubeinit.log 2>/dev/null
 
